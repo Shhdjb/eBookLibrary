@@ -1,0 +1,44 @@
+﻿@model eBookLibrary.Models.LoginViewModel
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px; border-radius: 15px;">
+        <div class="card-header bg-primary text-white text-center" style="border-radius: 15px 15px 0 0;">
+            <h4 class="mb-0">Welcome Back!</h4>
+            <p class="small">Please log in to continue</p>
+        </div>
+        <div class="card-body p-4">
+            <!-- Display error messages if any -->
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger text-center">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <!-- Login Form -->
+            <form method="post" action="@Url.Action("Login", "Login")">
+                <div class="form-group mb-4">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="Email" class="form-control form-control-lg rounded-pill"
+                           placeholder="Enter your email" required />
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="Password"
+                           class="form-control form-control-lg rounded-pill"
+                           placeholder="Enter your password" required />
+                </div>
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill">Login</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <p class="small">
+                    Don't have an account?
+                    <a href="@Url.Action("SignUp", "Register")" class="text-primary"><strong>Sign up here</strong></a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

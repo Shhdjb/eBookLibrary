@@ -1,0 +1,191 @@
+﻿@model IEnumerable<eBookLibrary.Models.Book>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>All Books</h2>
+    <!-- Log Out Button -->
+    <form method="post" action="/Login/LogOut">
+        <button type="submit" class="btn btn-danger">Log Out</button>
+    </form>
+</div>
+
+<!-- Navigation Bar -->
+<div class="navbar mb-3">
+    <a href="/User/PersonalPage" class="btn btn-secondary">Personal Page</a>
+</div>
+
+<!-- Display Error/Message -->
+@if (TempData.ContainsKey("Error"))
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @TempData["Error"]
+    </div>
+}
+@if (TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">
+        <strong>Message:</strong> @TempData["Message"]
+    </div>
+}
+
+<!-- Filter and Search Section -->
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label>Search</label>
+        <input type="text" name="search" value="@Request.QueryString["search"]" class="form-control" placeholder="Search books, authors, or publishers..." />
+    </div>
+    <div class="col-md-2">
+        <label>Genre</label>
+        <select name="genre" class="form-control">
+            <option value="">All Genres</option>
+            @foreach (var item in ViewBag.Genres)
+            {
+                <option value="@item" @(Request.QueryString["genre"] == item ? "selected" : "")>@item</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Year of Publishing</label>
+        <select name="yearOfPublishing" class="form-control">
+            <option value="">All Years</option>
+            @foreach (var year in ViewBag.Years)
+            {
+                <option value="@year" @(Request.QueryString["yearOfPublishing"] == year.ToString() ? "selected" : "")>@year</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Availability</label>
+        <select name="availability" class="form-control">
+            <option value="">All</option>
+            <option value="borrow" @(Request.QueryString["availability"] == "borrow" ? "selected" : "")>Borrow Only</option>
+            <option value="buy" @(Request.QueryString["availability"] == "buy" ? "selected" : "")>Buy Only</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Sort By</label>
+        <select name="sortBy" class="form-control">
+            <option value="">Default</option>
+            <option value="priceAsc" @(Request.QueryString["sortBy"] == "priceAsc" ? "selected" : "")>Price: Low to High</option>
+            <option value="priceDesc" @(Request.QueryString["sortBy"] == "priceDesc" ? "selected" : "")>Price: High to Low</option>
+            <option value="popularity" @(Request.QueryString["sortBy"] == "popularity" ? "selected" : "")>Most Popular</option>
+            <option value="year" @(Request.QueryString["sortBy"] == "year" ? "selected" : "")>Year of Publishing</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label>Age Limit</label>
+        <select name="ageLimit" class="form-control">
+            <option value="">All Ages</option>
+            <option value="8" @(Request.QueryString["ageLimit"] == "8" ? "selected" : "")>8+</option>
+            <option value="12" @(Request.QueryString["ageLimit"] == "12" ? "selected" : "")>12+</option>
+            <option value="16" @(Request.QueryString["ageLimit"] == "16" ? "selected" : "")>16+</option>
+            <option value="18" @(Request.QueryString["ageLimit"] == "18" ? "selected" : "")>18+</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label>On Sale</label>
+        <div class="form-check">
+            <input type="checkbox" name="onSale" value="true" @(Request.QueryString["onSale"] == "true" ? "checked" : "") class="form-check-input" id="onSaleCheckbox" />
+        </div>
+    </div>
+    <div class="col-md-12 mt-3 text-end">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<!-- Books Table -->
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Year</th>
+            <th>Age Limit</th>
+            <th>Buy Price</th>
+            <th>Borrow Price</th>
+            <th>Availability</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var book in Model)
+            {
+        <tr class="@(book.DiscountPrice.HasValue ? "table-success" : "")">
+            <td style="text-align: center;">
+                <img src="~/Content/Images/Covers/@book.CoverImagePath"
+                     alt="@book.Title" style="width: 50px; height: auto;" />
+            </td>
+            <td>@book.Title</td>
+            <td>@book.Author</td>
+            <td>@book.Publisher</td>
+            <td>@book.YearOfPublishing</td>
+            <td>@book.AgeLimit+</td>
+            <td>
+                @if (book.DiscountPrice.HasValue)
+                {
+                    <span style="text-decoration: line-through;">@book.BuyPrice.ToString("C")</span><br />
+                    <span style="color: red;">@book.DiscountPrice.Value.ToString("C")</span>
+                }
+                else
+                {
+                    <span>@book.BuyPrice.ToString("C")</span>
+                }
+            </td>
+            <td>@book.BorrowPrice.ToString("C")</td>
+            <td>@(book.IsAvailableForBorrow ? "Borrow Only" : "Buy Only")</td>
+            <td>
+                <!-- Borrow or Add to Waiting List -->
+                @if (book.CopiesAvailable > 0 && book.IsAvailableForBorrow)
+                {
+                    <form method="get" action="@Url.Action("BorrowBook", "Books")" style="display: inline;">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <button type="submit" class="btn btn-warning btn-sm">Borrow</button>
+                    </form>
+                }
+                @if (book.IsAvailableForBorrow)
+                {
+                    <form method="post" action="@Url.Action("AddToWaitingList", "Books")">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Join Waiting List</button>
+                    </form>
+
+                }
+                <!-- Buy Now Form -->
+                @if (!book.IsAvailableForBorrow)
+                {
+                    <form method="post" action="@Url.Action("Payment", "PayPal")" style="display: inline;">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <button type="submit" class="btn btn-success btn-sm">Buy Now</button>
+                    </form>
+                }
+                <!-- View Waiting List Button -->
+                <form method="get" action="@Url.Action("WaitingListView", "Books")" style="display: inline;">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <button type="submit" class="btn btn-info btn-sm">View Waiting List</button>
+                </form>
+                <!-- Add to Cart Form -->
+                <form method="post" action="/Cart/AddToCart" style="display: inline-block;">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <input type="hidden" name="title" value="@book.Title" />
+                    <input type="hidden" name="buyPrice" value="@book.BuyPrice" />
+                    <input type="hidden" name="discountPrice" value="@(book.DiscountPrice.HasValue ? book.DiscountPrice.Value : 0)" />
+                    <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
+                </form>
+            </td>
+
+
+        </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="10" class="text-center">No books found matching your criteria.</td>
+            </tr>
+        }
+    </tbody>
+</table>

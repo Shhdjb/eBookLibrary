@@ -1,0 +1,17 @@
+﻿@model eBookLibrary.Models.Book
+
+<div class="container">
+    <h2>Borrow Payment</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5>@Model.Title</h5>
+            <p>Author: @Model.Author</p>
+            <p>Borrow Price: <strong>@Model.BorrowPrice.ToString("C")</strong></p>
+            <form asp-action="ProcessBorrowPayment" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="bookId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary">Proceed to PayPal</button>
+            </form>
+        </div>
+    </div>
+</div>

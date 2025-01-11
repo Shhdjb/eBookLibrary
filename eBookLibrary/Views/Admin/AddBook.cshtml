@@ -1,0 +1,84 @@
+﻿@model eBookLibrary.Models.Book
+
+<h2>Add a New Book</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@using (Html.BeginForm("AddBook", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label>Title</label>
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Book Title", required = "required" })
+    </div>
+    <div class="form-group">
+        <label>Author</label>
+        @Html.TextBoxFor(m => m.Author, new { @class = "form-control", placeholder = "Author Name", required = "required" })
+    </div>
+    <div class="form-group">
+        <label>Publisher</label>
+        @Html.TextBoxFor(m => m.Publisher, new { @class = "form-control", placeholder = "Publisher Name", required = "required" })
+    </div>
+    <div class="form-group">
+        <label>Year of Publishing</label>
+        @Html.TextBoxFor(m => m.YearOfPublishing, new { @class = "form-control", placeholder = "Year", required = "required", type = "number" })
+    </div>
+    <div class="form-group">
+        <label>Buy Price</label>
+        @Html.TextBoxFor(m => m.BuyPrice, new { @class = "form-control", placeholder = "Buy Price", required = "required", type = "number", step = "0.01" })
+    </div>
+    <div class="form-group">
+        <label>Borrow Price</label>
+        @Html.TextBoxFor(m => m.BorrowPrice, new { @class = "form-control", placeholder = "Borrow Price", required = "required", type = "number", step = "0.01" })
+    </div>
+    <div class="form-group">
+        <label>Genre</label>
+        @Html.TextBoxFor(m => m.Genre, new { @class = "form-control", placeholder = "Genre", required = "required" })
+    </div>
+    <div class="form-group">
+        <label>Age Limit</label>
+        @Html.TextBoxFor(m => m.AgeLimit, new { @class = "form-control", placeholder = "Age Limit", required = "required", type = "number" })
+    </div>
+    <div class="form-group">
+        <label>Popularity</label>
+        @Html.TextBoxFor(m => m.Popularity, new { @class = "form-control", placeholder = "Popularity (1-100)", required = "required", type = "number", min = "1", max = "100" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DiscountPrice)
+        @Html.TextBoxFor(model => model.DiscountPrice, new { @class = "form-control", type = "number", step = "0.01" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DiscountStartDate)
+        @Html.TextBoxFor(model => model.DiscountStartDate, new { @class = "form-control", type = "date" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DiscountEndDate)
+        @Html.TextBoxFor(model => model.DiscountEndDate, new { @class = "form-control", type = "date" })
+    </div>
+    <div class="form-group">
+        <label>Available Copies</label>
+        @Html.TextBoxFor(m => m.CopiesAvailable, new { @class = "form-control", placeholder = "Number of Copies Available", required = "required", type = "number" })
+    </div>
+    <div class="form-group">
+        <label>Is Available for Borrow</label>
+        @Html.CheckBoxFor(m => m.IsAvailableForBorrow)
+    </div>
+    <div class="form-group">
+        <label>Cover Image</label>
+        <input type="file" name="CoverImage" class="form-control-file" required />
+    </div>
+    <div class="form-group">
+        <label>Format</label>
+        @Html.DropDownListFor(m => m.Formats, new SelectList(ViewBag.Formats as List<string>), "Select a Format", new { @class = "form-control", required = "required" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add Book</button>
+    </div>
+}

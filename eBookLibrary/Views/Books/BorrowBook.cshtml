@@ -1,0 +1,60 @@
+﻿@model eBookLibrary.Models.BorrowViewModel
+
+<!-- Button to go back to All Books -->
+<a href="/Books/Index" class="btn btn-primary mt-3 btn-sm">Back to All Books</a>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Borrow Book</h2>
+
+    @if (Model != null && Model.Book != null)
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="row no-gutters">
+                        <!-- Book Cover -->
+                        <div class="col-md-4">
+                            <img src="~/Content/Images/Covers/@Model.Book.CoverImagePath"
+                                 class="card-img" alt="@Model.Book.Title" style="height: 100%; object-fit: cover;">
+                        </div>
+
+                        <!-- Book Details -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">@Model.Book.Title</h5>
+                                <p class="card-text"><strong>Author:</strong> @Model.Book.Author</p>
+                                <p class="card-text"><strong>Genre:</strong> @Model.Book.Genre</p>
+                                <p class="card-text"><strong>Price:</strong> $@Model.Book.BorrowPrice</p>
+                                <p class="card-text">
+                                    @if (Model.RemainingTime.HasValue)
+                                    {
+                                        <span class="text-danger">Already Borrowed (Remaining Time: <strong>@Model.RemainingTime.Value days</strong>)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">Available to Borrow</span>
+                                    }
+                                </p>
+
+                                <!-- Borrow Now Button -->
+                                <form method="post" action="/PayPal/ProcessPayment">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="bookId" value="@Model.Book.Id" />
+                                    <input type="hidden" name="amount" value="@Model.Book.BorrowPrice" />
+                                    <input type="hidden" name="isBorrowed" value="true" />
+                                    <button type="submit" class="btn btn-success btn-sm mt-3">
+                                        Borrow Now for $@Model.Book.BorrowPrice
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger text-center">No book found.</div>
+    }
+</div>

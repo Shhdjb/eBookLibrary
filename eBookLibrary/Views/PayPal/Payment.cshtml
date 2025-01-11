@@ -1,0 +1,55 @@
+﻿@model eBookLibrary.Models.Book
+
+@{
+    ViewBag.Title = "Payment";
+}
+
+<!-- Button to go back to All Books -->
+
+<div class="container my-5">
+    <a href="/Books/Index" class="btn btn-primary mt-3 btn-sm">Back to All Books</a>
+    <h2 class="text-center mb-4">Payment for @Model.Title</h2>
+
+    <!-- Card layout for book details -->
+    <div class="card shadow-lg p-4 mt-2">
+        <div class="row">
+            <!-- Book Cover -->
+            <div class="col-md-4">
+                <img src="@Url.Content("~/Content/Images/Covers/" + Model.CoverImagePath)"
+                     alt="@Model.Title"
+                     class="img-fluid"
+                     style="height: 100%; object-fit: cover;" />
+            </div>
+
+            <!-- Book Details -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <p><strong>Title:</strong> @Model.Title</p>
+                    <p><strong>Author:</strong> @Model.Author</p>
+                    <p>
+                        <strong>Price:</strong>
+                        @if (Model.DiscountPrice.HasValue)
+                        {
+                            <span style="text-decoration: line-through;">@Model.BuyPrice.ToString("C")</span><br />
+                            <span style="color: red;">@Model.DiscountPrice.Value.ToString("C")</span>
+                        }
+                        else
+                        {
+                            <span>@Model.BuyPrice.ToString("C")</span>
+                        }
+                    </p>
+
+                    <!-- Add the PayPal button -->
+                    @using (Html.BeginForm("ProcessPayment", "PayPal", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+                        <input type="hidden" name="amount" value="@(Model.DiscountPrice ?? Model.BuyPrice)" />
+                        <input type="hidden" name="isBorrowed" value="false" />
+                        <button type="submit" class="btn btn-success btn-lg mt-3 w-100">Pay Now</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

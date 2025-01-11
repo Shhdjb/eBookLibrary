@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/css/styles.css" rel="stylesheet">
+    <script src="/Scripts/script.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Library Feedback Page" />
+    <meta name="author" content="Your Library" />
+    <link rel="icon" type="image/x-icon" href="/Content/Images/assets/favicon.ico" />
+    <!-- Bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Library Feedback</title>
+</head>
+<body id="page-top">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+        <div class="container px-5">
+            <a class="navbar-brand fw-bold" href="#page-top">OUR LIBRARY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary me-2" href="/Login/Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/Register/SignUp">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-1 lh-1 mb-3">Welcome to Our Library</h1>
+                    <p class="lead fw-normal text-muted mb-5">Rate your experience and share your feedback!</p>
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-fluid rounded" src="~/Content/Images/assets/img/img1.jpeg.jpg" alt="Library Image">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="feedback" class="py-5 bg-light">
+        <div class="container px-5">
+            <h2 class="text-center mb-4">Feedback</h2>
+            <form id="feedbackForm">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating (1-5):</label>
+                    <select id="rating" name="rating" class="form-select" required>
+                        <option value="1">1 - Poor</option>
+                        <option value="2">2 - Fair</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="5">5 - Excellent</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="feedback" class="form-label">Feedback:</label>
+                    <textarea id="feedback" name="feedback" class="form-control" rows="4" placeholder="Write your feedback here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="feedback-list" class="py-5">
+        <div class="container px-5">
+            <h2 class="text-center mb-4">What our users say</h2>
+            <div id="feedbackContainer" class="row">
+                <!-- Feedback entries will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <script>// Handle the feedback form submission
+        document.getElementById('feedbackForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            // Get the rating and feedback values
+            const rating = document.getElementById('rating').value;
+            const feedback = document.getElementById('feedback').value;
+
+            // Check if feedback is empty (optional)
+            if (!feedback.trim()) {
+                alert("Feedback cannot be empty!");
+                return;
+            }
+
+            // Create a new feedback card
+            const feedbackCard = document.createElement('div');
+            feedbackCard.className = 'col-md-4';
+            feedbackCard.innerHTML = `
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Rating: ${rating}/5</h5>
+                        <p class="card-text">${feedback}</p>
+                    </div>
+                </div>
+            `;
+
+            // Add the new feedback card to the feedback container
+            document.getElementById('feedbackContainer').appendChild(feedbackCard);
+
+            // Clear the form fields
+            document.getElementById('feedbackForm').reset();
+        });</script>
+
+
+</body>
+</html>

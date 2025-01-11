@@ -1,0 +1,15 @@
+﻿@model eBookLibrary.Models.BorrowViewModel
+
+<div class="container">
+    <h2>Borrow Confirmation</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h5>@Model.Book.Title</h5>
+            <p>Author: @Model.Book.Author</p>
+            <p>Borrowed on: <strong>@Model.BorrowDate.ToShortDateString()</strong></p>
+            <p>Return by: <strong>@Model.ReturnDate.ToShortDateString()</strong></p>
+        </div>
+    </div>
+    <a href="/Books/Index" class="btn btn-success mt-3">Back to Library</a>
+</div>

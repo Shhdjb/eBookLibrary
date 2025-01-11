@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Payment Confirmation";
+}
+
+<h2>Payment Confirmation</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success!</strong> @TempData["Message"]
+    </div>
+}
+else if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @TempData["Error"]
+    </div>
+}
+
+<a href="@Url.Action("Index", "Books")" class="btn btn-primary">Return to All Books</a>

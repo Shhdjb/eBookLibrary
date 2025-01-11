@@ -1,0 +1,133 @@
+﻿@model eBookLibrary.Models.Book
+
+@{
+    ViewBag.Title = "Edit Book";
+}
+
+<h2 class="text-center mt-4 mb-4">Edit Book</h2>
+
+<div class="container">
+    @using (Html.BeginForm("Edit", "Books", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title text-center mb-4">Book Details</h4>
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+                @Html.HiddenFor(model => model.Id)
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="Title" class="form-label">@Html.LabelFor(model => model.Title)</label>
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter book title" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Cover Image -->
+                <div class="mb-3">
+                    <label for="CoverImage" class="form-label">Upload Cover Image</label>
+                    <input type="file" class="form-control" id="CoverImage" name="CoverImage">
+                </div>
+
+                <!-- Author -->
+                <div class="mb-3">
+                    <label for="Author" class="form-label">@Html.LabelFor(model => model.Author)</label>
+                    @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter author's name" } })
+                    @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Publisher -->
+                <div class="mb-3">
+                    <label for="Publisher" class="form-label">@Html.LabelFor(model => model.Publisher)</label>
+                    @Html.EditorFor(model => model.Publisher, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter publisher name" } })
+                    @Html.ValidationMessageFor(model => model.Publisher, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Buy Price -->
+                <div class="mb-3">
+                    <label for="BuyPrice" class="form-label">@Html.LabelFor(model => model.BuyPrice)</label>
+                    @Html.EditorFor(model => model.BuyPrice, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter buy price" } })
+                    @Html.ValidationMessageFor(model => model.BuyPrice, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Borrow Price -->
+                <div class="mb-3">
+                    <label for="BorrowPrice" class="form-label">@Html.LabelFor(model => model.BorrowPrice)</label>
+                    @Html.EditorFor(model => model.BorrowPrice, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter borrow price" } })
+                    @Html.ValidationMessageFor(model => model.BorrowPrice, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Is Available for Borrow -->
+                <div class="mb-3">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(model => model.IsAvailableForBorrow, new { @class = "form-check-input" })
+                        <label class="form-check-label" for="IsAvailableForBorrow">@Html.LabelFor(model => model.IsAvailableForBorrow)</label>
+                    </div>
+                </div>
+
+                <!-- Copies Available -->
+                <div class="mb-3">
+                    <label for="CopiesAvailable" class="form-label">@Html.LabelFor(model => model.CopiesAvailable)</label>
+                    @Html.EditorFor(model => model.CopiesAvailable, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter copies available" } })
+                    @Html.ValidationMessageFor(model => model.CopiesAvailable, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Genre -->
+                <div class="mb-3">
+                    <label for="Genre" class="form-label">@Html.LabelFor(model => model.Genre)</label>
+                    @Html.EditorFor(model => model.Genre, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter book genre" } })
+                    @Html.ValidationMessageFor(model => model.Genre, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Year of Publishing -->
+                <div class="mb-3">
+                    <label for="YearOfPublishing" class="form-label">@Html.LabelFor(model => model.YearOfPublishing)</label>
+                    @Html.EditorFor(model => model.YearOfPublishing, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter year of publishing" } })
+                    @Html.ValidationMessageFor(model => model.YearOfPublishing, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Age Limit -->
+                <div class="mb-3">
+                    <label for="AgeLimit" class="form-label">@Html.LabelFor(model => model.AgeLimit)</label>
+                    @Html.EditorFor(model => model.AgeLimit, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter age limit" } })
+                    @Html.ValidationMessageFor(model => model.AgeLimit, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Popularity -->
+                <div class="mb-3">
+                    <label for="Popularity" class="form-label">@Html.LabelFor(model => model.Popularity)</label>
+                    @Html.EditorFor(model => model.Popularity, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter popularity score" } })
+                    @Html.ValidationMessageFor(model => model.Popularity, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Discount Price -->
+                <div class="mb-3">
+                    <label for="DiscountPrice" class="form-label">@Html.LabelFor(model => model.DiscountPrice)</label>
+                    @Html.EditorFor(model => model.DiscountPrice, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter discount price" } })
+                    @Html.ValidationMessageFor(model => model.DiscountPrice, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Discount Start Date -->
+                <div class="mb-3">
+                    <label for="DiscountStartDate" class="form-label">@Html.LabelFor(model => model.DiscountStartDate)</label>
+                    @Html.EditorFor(model => model.DiscountStartDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                    @Html.ValidationMessageFor(model => model.DiscountStartDate, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Discount End Date -->
+                <div class="mb-3">
+                    <label for="DiscountEndDate" class="form-label">@Html.LabelFor(model => model.DiscountEndDate)</label>
+                    @Html.EditorFor(model => model.DiscountEndDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                    @Html.ValidationMessageFor(model => model.DiscountEndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Submit and Back Buttons -->
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="@Url.Action("Index", "Books")" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    }
+</div>
